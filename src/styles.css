@@ -4,14 +4,19 @@ html {
   }
   
   body {
-    margin: 0;
+    margin: 50px;
   }
   
   svg {
     display: inline-block;
     vertical-align: middle;
+
   }
-  
+
+  svg.rsm-svg {
+    border-style: dotted;
+
+  }
   .controls {
     display: flex;
     position: fixed;

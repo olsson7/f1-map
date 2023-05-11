@@ -1,6 +1,3 @@
-
-
-
 import React, { useState } from "react";
 import {
   ComposableMap,
@@ -30,6 +27,7 @@ const MapChart = () => {
 
   return (
     <div>
+        <h1> F1 World map!</h1>
       <ComposableMap>
         <ZoomableGroup
           zoom={position.zoom}
