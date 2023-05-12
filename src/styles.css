@@ -23,7 +23,7 @@ html {
     position: fixed;
     top: 0;
     left: 50%;
-    margin: 1.25rem 0;
+    margin: 6.00rem 0;
     text-align: center;
     transform: translateX(-50%);
   }
@@ -70,4 +70,9 @@ html {
   margin-left: -5px;
   border-width: 5px;
   border-color: transparent transparent #333 transparent;
+}
+
+h1 {
+  background: beige;
+  text-align: center;
 }

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Tooltip from '@mui/material/Tooltip';
 import axios from "axios";
-
-
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import {
     ComposableMap,
     Geographies,
@@ -10,19 +10,14 @@ import {
     ZoomableGroup,
     Marker
 } from "react-simple-maps";
-
 const geoUrl = "/features.json";
-
-
-
-
 
 const MapChart = () => {
     const [position, setPosition] = useState({ coordinates: [0, 0], zoom: 1 });
     const [tooltipText, setTooltipText] = useState("");
-
-
     const [race, setRace] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [clickedMarker, setClickedMarker] = useState(null);
 
     useEffect(() => {
         axios.get("https://ergast.com/api/f1/current.json")
@@ -38,10 +33,7 @@ const MapChart = () => {
         axios.get("https://ergast.com/api/f1/current.json")
             .then(response => {
                 console.log(response.data.MRData);
-
-
                 setRace(response.data.MRData);
-
                 setMarkers2(response.data.MRData.RaceTable.Races);
             })
             .catch(error => {
@@ -66,9 +58,6 @@ const MapChart = () => {
         });
         setMarkers(newMarkers);
     }
-    
-
-
 
     function handleZoomIn() {
         if (position.zoom >= 4) return;
@@ -91,10 +80,17 @@ const MapChart = () => {
     function handleMarkerMouseLeave() {
         setTooltipText("");
     }
+    function handleMarkerClick(marker) {
+        setClickedMarker(marker);
+        setShowModal(true);
+    }
+
+    function handleCloseModal() {
+        setShowModal(false);
+    }
 
     return (
         <div>
-            <h1> F1 World map!</h1>
             <ComposableMap>
                 <ZoomableGroup
                     zoom={position.zoom}
@@ -111,14 +107,17 @@ const MapChart = () => {
                     {markers.map(({ coordinates, tooltipText, color }) => (
                         <Tooltip title={tooltipText}>
                             <Marker
-    key={`${coordinates[0]}-${coordinates[1]}`}
-    coordinates={coordinates}
-    onMouseEnter={() => handleMarkerMouseEnter(tooltipText)}
-    onMouseLeave={handleMarkerMouseLeave}
-    onClick={() => console.log(`Marker clicked: ${tooltipText}`)}
->
-    <circle r={3} fill={color} />
-</Marker>
+                                key={`${coordinates[0]}-${coordinates[1]}`}
+                                coordinates={coordinates}
+                                onMouseEnter={() => handleMarkerMouseEnter(tooltipText)}
+                                onMouseLeave={handleMarkerMouseLeave}
+                                onClick={() => {
+                                    setClickedMarker({ coordinates, tooltipText, color });
+                                    setShowModal(true);
+                                }}
+                            >
+                                <circle r={3} fill={color} />
+                            </Marker>
                         </Tooltip>
                     ))}
 
@@ -151,6 +150,21 @@ const MapChart = () => {
                     </svg>
                 </button>
             </div>
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{clickedMarker?.tooltipText}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Latitude: {clickedMarker?.coordinates[1]}</p>
+                    <p>Longitude: {clickedMarker?.coordinates[0]}</p>
+                    <p>Color: {clickedMarker?.color}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
