@@ -43,4 +43,31 @@ html {
   .controls > button:first-child {
     margin-right: 0.25rem;
   }
-  
+
+  .__react_component_tooltip {
+    background-color: #333;
+    color: #fff;
+    font-size: 14px;
+}
+
+/* Define the styles for the tooltip */
+.tooltip {
+  background-color: #333;
+  padding: 5px;
+  font-size: 12px;
+  border-radius: 3px;
+  opacity: 0.8;
+  max-width: 200px;
+  text-align: center;
+}
+
+/* Define the arrow for the tooltip */
+.tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  margin-left: -5px;
+  border-width: 5px;
+  border-color: transparent transparent #333 transparent;
+}
