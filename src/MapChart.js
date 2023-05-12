@@ -52,12 +52,18 @@ const MapChart = () => {
     const [markers, setMarkers] = useState([]);
 
     function setMarkers2(races) {
-        console.log(races);
+        const currentDate = new Date();
+        const newMarkers = races.map((race) => {
+            const raceDate = new Date(`${race.date}T${race.time}`);
+            const hasRaceHappened = currentDate > raceDate;
+            const color = hasRaceHappened ? "#F53" : "#00FF00";
 
-        const newMarkers = races.map((race) => ({
-            coordinates: [parseFloat(race.Circuit.Location.long), parseFloat(race.Circuit.Location.lat)],
-            tooltipText: race.Circuit.circuitName
-        }));
+            return {
+                coordinates: [parseFloat(race.Circuit.Location.long), parseFloat(race.Circuit.Location.lat)],
+                tooltipText: race.Circuit.circuitName,
+                color: color,
+            };
+        });
         setMarkers(newMarkers);
     }
     
@@ -102,17 +108,17 @@ const MapChart = () => {
                             ))
                         }
                     </Geographies>
-                    {markers.map(({ coordinates, tooltipText }) => (
+                    {markers.map(({ coordinates, tooltipText, color }) => (
                         <Tooltip title={tooltipText}>
                             <Marker
-                                key={`${coordinates[0]}-${coordinates[1]}`}
-                                coordinates={coordinates}
-                                onMouseEnter={() => handleMarkerMouseEnter(tooltipText)}
-                                onMouseLeave={handleMarkerMouseLeave}
-                                onClick={() => console.log(`Marker clicked: ${tooltipText}`)}
-                            >
-                                <circle r={3} fill="#F53" />
-                            </Marker>
+    key={`${coordinates[0]}-${coordinates[1]}`}
+    coordinates={coordinates}
+    onMouseEnter={() => handleMarkerMouseEnter(tooltipText)}
+    onMouseLeave={handleMarkerMouseLeave}
+    onClick={() => console.log(`Marker clicked: ${tooltipText}`)}
+>
+    <circle r={3} fill={color} />
+</Marker>
                         </Tooltip>
                     ))}
 
