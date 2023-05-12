@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Tooltip from '@mui/material/Tooltip';
+import axios from "axios";
+
 
 import {
     ComposableMap,
@@ -11,24 +13,56 @@ import {
 
 const geoUrl = "/features.json";
 
-const markers = [
-    {
-        coordinates: [-80.1918, 25.7617],
-        tooltipText: "Miami"
-    },
-    {
-        coordinates: [2.3522, 48.8566],
-        tooltipText: "Paris"
-    },
-    {
-        coordinates: [139.6917, 35.6895],
-        tooltipText: "Tokyo"
-    }
-];
+
+
+
 
 const MapChart = () => {
     const [position, setPosition] = useState({ coordinates: [0, 0], zoom: 1 });
     const [tooltipText, setTooltipText] = useState("");
+
+
+    const [race, setRace] = useState([]);
+
+    useEffect(() => {
+        axios.get("https://ergast.com/api/f1/current.json")
+            .then(response => {
+                console.log(response.data.MRData);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, []);
+
+    useEffect(() => {
+        axios.get("https://ergast.com/api/f1/current.json")
+            .then(response => {
+                console.log(response.data.MRData);
+
+
+                setRace(response.data.MRData);
+
+                setMarkers2(response.data.MRData.RaceTable.Races);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, []);
+
+    const [markers, setMarkers] = useState([]);
+
+    function setMarkers2(races) {
+        console.log(races);
+
+        const newMarkers = races.map((race) => ({
+            coordinates: [parseFloat(race.Circuit.Location.long), parseFloat(race.Circuit.Location.lat)],
+            tooltipText: race.Circuit.circuitName
+        }));
+        setMarkers(newMarkers);
+    }
+    
+
+
 
     function handleZoomIn() {
         if (position.zoom >= 4) return;
@@ -76,7 +110,7 @@ const MapChart = () => {
                                 onMouseEnter={() => handleMarkerMouseEnter(tooltipText)}
                                 onMouseLeave={handleMarkerMouseLeave}
                                 onClick={() => console.log(`Marker clicked: ${tooltipText}`)}
-                                >
+                            >
                                 <circle r={3} fill="#F53" />
                             </Marker>
                         </Tooltip>
