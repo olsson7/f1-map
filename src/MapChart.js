@@ -13,12 +13,12 @@ const MapChart = () => {
 
   function handleZoomIn() {
     if (position.zoom >= 4) return;
-    setPosition((pos) => ({ ...pos, zoom: pos.zoom * 2 }));
+    setPosition((pos) => ({ ...pos, zoom: pos.zoom * 1.33 }));
   }
 
   function handleZoomOut() {
     if (position.zoom <= 1) return;
-    setPosition((pos) => ({ ...pos, zoom: pos.zoom / 2 }));
+    setPosition((pos) => ({ ...pos, zoom: pos.zoom / 1.33 }));
   }
 
   function handleMoveEnd(position) {

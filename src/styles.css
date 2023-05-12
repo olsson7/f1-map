@@ -1,6 +1,7 @@
 html {
     font-family: system-ui, sans-serif;
     font-size: 1.25rem;
+    background-color: darkgray;
   }
   
   body {
@@ -14,7 +15,7 @@ html {
   }
 
   svg.rsm-svg {
-    border-style: dotted;
+    background-color: white;
 
   }
   .controls {
