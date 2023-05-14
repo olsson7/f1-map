@@ -36,8 +36,8 @@ const MapChart = () => {
             });
 
     },
-    
-    []);
+
+        []);
 
 
     useEffect(() => {
@@ -55,15 +55,15 @@ const MapChart = () => {
 
 
     }
-    
-    , []);
+
+        , []);
 
 
     useEffect(() => {
         axios.get("https://ergast.com/api/f1/current/results/1.json")
             .then(response => {
                 console.log(response.data.MRData);
-                setWinner(response.data.MRData);
+                setWinner(response.data.MRData.RaceTable.Races);
                 //console.log(response.data.MRData);
 
                 //setMarkers2(race.RaceTable.Races);
@@ -74,8 +74,8 @@ const MapChart = () => {
 
 
     }
-    
-    , []);
+
+        , []);
 
 
     useEffect(() => {
@@ -93,8 +93,8 @@ const MapChart = () => {
 
 
     }
-    
-    , []);
+
+        , []);
 
 
 
@@ -113,8 +113,8 @@ const MapChart = () => {
 
 
     }
-    
-    , []);
+
+        , []);
 
 
 
@@ -122,17 +122,17 @@ const MapChart = () => {
     useEffect(() => {
         console.log(race);
         setMarkersMap(race);
-      }, [race]);
+    }, [race]);
 
 
-      useEffect(() => {
+    useEffect(() => {
         console.log(result);
         //setMarkersMap(race);
-      }, [result]);
+    }, [result]);
 
 
 
-      
+
 
 
     const [markers, setMarkers] = useState([]);
@@ -146,7 +146,7 @@ const MapChart = () => {
 
             let logo_path = race.Circuit.circuitName.split(' ').join('-');
             //console.log(logo_path); 
-            const logos = process.env.PUBLIC_URL + './assets/'+`${logo_path}`+'.png'; 
+            const logos = process.env.PUBLIC_URL + './assets/' + `${logo_path}` + '.png';
 
             return {
                 coordinates: [parseFloat(race.Circuit.Location.long), parseFloat(race.Circuit.Location.lat)],
@@ -154,7 +154,8 @@ const MapChart = () => {
                 color: color,
                 date: race.date,
                 round: race.round,
-                map: logos
+                map: logos,
+                hasHappend: hasRaceHappened
             };
         });
         setMarkers(newMarkers);
@@ -175,7 +176,7 @@ const MapChart = () => {
     }
 
     function handleMarkerMouseEnter(event) {
-       console.log(event);
+        console.log(event);
     }
 
     function handleMarkerMouseLeave() {
@@ -193,16 +194,16 @@ const MapChart = () => {
     return (
         <div>
             <div class="nextRace">
-            {next && next.length > 0 && <h2>F1 Season {next[0].season}</h2>}
-
-{next && next.length > 0 && <p>Next race is {next[0].raceName}</p>}
-{next && next.length > 0 && <p>{next[0].date} , {next[0].time} </p>}
+                {next && next.length > 0 && <h2>F1 Season {next[0].season}</h2>}
+                {next && next.length > 0 && <p>Next race is {next[0].raceName}</p>}
+                {next && next.length > 0 && <p>Round {next[0].round}</p>}
+                {next && next.length > 0 && <p>{next[0].date} , {next[0].time.slice(0, -4)} </p>}
 
             </div>
-    
 
 
-           
+
+
 
             <br></br>
             <ComposableMap>
@@ -228,7 +229,7 @@ const MapChart = () => {
                             ))
                         }
                     </Geographies>
-                    {markers.map(({ coordinates, tooltipText, color, date, round, map }) => (
+                    {markers.map(({ coordinates, tooltipText, color, date, round, map, hasHappend }) => (
                         <Tooltip title={tooltipText}>
                             <Marker
                                 key={`${coordinates[0]}-${coordinates[1]}`}
@@ -236,7 +237,7 @@ const MapChart = () => {
                                 onMouseEnter={() => handleMarkerMouseEnter(this)}
                                 onMouseLeave={handleMarkerMouseLeave}
                                 onClick={() => {
-                                    setClickedMarker({ coordinates, tooltipText, color, date, round, map });
+                                    setClickedMarker({ coordinates, tooltipText, color, date, round, map, hasHappend });
                                     setShowModal(true);
                                 }}
                             >
@@ -283,8 +284,23 @@ const MapChart = () => {
                 <Modal.Body>
                     <p>Round: {clickedMarker?.round}</p>
                     <p>Date: {clickedMarker?.date}</p>
-                    //IF
-                    <img src={clickedMarker?.map}alt="track" className="modal-image"></img>
+
+                    <p>{clickedMarker?.hasHappend}</p>
+
+                    {clickedMarker?.hasHappend && (
+                        
+                            <p>Winner: {winner[clickedMarker?.round-1].Results[0].Driver.givenName} {winner[clickedMarker?.round-1].Results[0].Driver.familyName}</p>
+                        
+                    )}   
+                    {clickedMarker?.hasHappend && (
+                        
+                        <p><a href="/result">See full result</a></p>
+                    
+                )}  
+
+
+                 
+                    <img src={clickedMarker?.map} alt="track" className="modal-image"></img>
 
                 </Modal.Body>
                 <Modal.Footer>
