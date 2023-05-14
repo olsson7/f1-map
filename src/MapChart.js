@@ -15,6 +15,8 @@ const geoUrl = "/features.json";
 const MapChart = () => {
     const [position, setPosition] = useState({ coordinates: [0, 0], zoom: 1 });
     const [tooltipText, setTooltipText] = useState("");
+    const [next, setNext] = useState("");
+
     const [race, setRace] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [clickedMarker, setClickedMarker] = useState(null);
@@ -31,6 +33,25 @@ const MapChart = () => {
     },
     
     []);
+
+
+    useEffect(() => {
+        axios.get("https://ergast.com/api/f1/current/next.json")
+            .then(response => {
+                //console.log(response.data.MRData);
+                setNext(response.data.MRData.RaceTable.Races);
+                console.log(response.data.MRData.RaceTable.Races);
+
+                //setMarkers2(race.RaceTable.Races);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+
+
+    }
+    
+    , []);
 
     useEffect(() => {
         axios.get("https://ergast.com/api/f1/current.json")
@@ -57,6 +78,9 @@ const MapChart = () => {
 
 
 
+      
+
+
     const [markers, setMarkers] = useState([]);
 
     function setMarkersMap(races) {
@@ -67,7 +91,7 @@ const MapChart = () => {
             const color = hasRaceHappened ? "#F53" : "#00FF00";
 
             let logo_path = race.Circuit.circuitName.split(' ').join('-');
-            console.log(logo_path); 
+            //console.log(logo_path); 
             const logos = process.env.PUBLIC_URL + './assets/'+`${logo_path}`+'.png'; 
 
             return {
@@ -96,8 +120,8 @@ const MapChart = () => {
         setPosition(position);
     }
 
-    function handleMarkerMouseEnter() {
-        setTooltipText("Miami");
+    function handleMarkerMouseEnter(event) {
+       console.log(event);
     }
 
     function handleMarkerMouseLeave() {
@@ -114,6 +138,15 @@ const MapChart = () => {
 
     return (
         <div>
+    {next && next.length > 0 && <h2>F1 Season {next[0].season}</h2>}
+
+    {next && next.length > 0 && <p>Next race is {next[0].raceName}</p>}
+    {next && next.length > 0 && <p>{next[0].date} , {next[0].time} </p>}
+
+
+           
+
+            <br></br>
             <ComposableMap>
                 <ZoomableGroup
                     zoom={position.zoom}
@@ -142,14 +175,16 @@ const MapChart = () => {
                             <Marker
                                 key={`${coordinates[0]}-${coordinates[1]}`}
                                 coordinates={coordinates}
-                                onMouseEnter={() => handleMarkerMouseEnter(tooltipText)}
+                                onMouseEnter={() => handleMarkerMouseEnter(this)}
                                 onMouseLeave={handleMarkerMouseLeave}
                                 onClick={() => {
                                     setClickedMarker({ coordinates, tooltipText, color, date, round, map });
                                     setShowModal(true);
                                 }}
                             >
-                                <circle r={3} fill={color} />
+                                <circle r={4} fill={color} />
+                                <text textAnchor="middle" fill="black" fontSize="6px" fontFamily="Arial" dy=".3em">{round}</text>
+
                             </Marker>
                         </Tooltip>
                     ))}

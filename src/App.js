@@ -8,7 +8,6 @@ export default function App() {
   return (
     <div>
       <NavBar />
-                  <h1> F1 World map!</h1>
       <MapChart  />
 
     </div>
