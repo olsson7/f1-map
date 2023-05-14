@@ -66,12 +66,17 @@ const MapChart = () => {
             const hasRaceHappened = currentDate > raceDate;
             const color = hasRaceHappened ? "#F53" : "#00FF00";
 
+            const logos = process.env.PUBLIC_URL + './Miami-International-Autodrome-768x432.png'; // with require
+
+            //get local image that 
+
             return {
                 coordinates: [parseFloat(race.Circuit.Location.long), parseFloat(race.Circuit.Location.lat)],
                 tooltipText: race.Circuit.circuitName,
                 color: color,
                 date: race.date,
-                round: race.round
+                round: race.round,
+                map: logos
             };
         });
         setMarkers(newMarkers);
@@ -132,7 +137,7 @@ const MapChart = () => {
                             ))
                         }
                     </Geographies>
-                    {markers.map(({ coordinates, tooltipText, color, date, round }) => (
+                    {markers.map(({ coordinates, tooltipText, color, date, round, map }) => (
                         <Tooltip title={tooltipText}>
                             <Marker
                                 key={`${coordinates[0]}-${coordinates[1]}`}
@@ -140,7 +145,7 @@ const MapChart = () => {
                                 onMouseEnter={() => handleMarkerMouseEnter(tooltipText)}
                                 onMouseLeave={handleMarkerMouseLeave}
                                 onClick={() => {
-                                    setClickedMarker({ coordinates, tooltipText, color, date, round });
+                                    setClickedMarker({ coordinates, tooltipText, color, date, round, map });
                                     setShowModal(true);
                                 }}
                             >
@@ -185,6 +190,7 @@ const MapChart = () => {
                 <Modal.Body>
                     <p>Round: {clickedMarker?.round}</p>
                     <p>Date: {clickedMarker?.date}</p>
+                    <img src={clickedMarker?.map}alt="track" className="modal-image"></img>
 
                 </Modal.Body>
                 <Modal.Footer>
