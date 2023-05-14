@@ -5,7 +5,7 @@ html {
   }
   
   body {
-    margin: 50px;
+    margin: 100px;
   }
   
   svg {
@@ -23,7 +23,7 @@ html {
     position: absolute;
     top: 0;
     left: 50%;
-    margin: 6.00rem 0;
+    margin: 9.00rem 0;
     text-align: center;
     transform: translateX(-50%);
   }

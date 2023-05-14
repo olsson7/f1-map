@@ -66,9 +66,9 @@ const MapChart = () => {
             const hasRaceHappened = currentDate > raceDate;
             const color = hasRaceHappened ? "#F53" : "#00FF00";
 
-            const logos = process.env.PUBLIC_URL + './Miami-International-Autodrome-768x432.png'; // with require
-
-            //get local image that 
+            let logo_path = race.Circuit.circuitName.split(' ').join('-');
+            console.log(logo_path); 
+            const logos = process.env.PUBLIC_URL + './assets/'+`${logo_path}`+'.png'; 
 
             return {
                 coordinates: [parseFloat(race.Circuit.Location.long), parseFloat(race.Circuit.Location.lat)],
