@@ -22,28 +22,44 @@ const MapChart = () => {
     useEffect(() => {
         axios.get("https://ergast.com/api/f1/current.json")
             .then(response => {
-                console.log(response.data.MRData);
+                //console.log(response.data.MRData);
             })
             .catch(error => {
                 console.log(error);
             });
-    }, []);
+
+    },
+    
+    []);
 
     useEffect(() => {
         axios.get("https://ergast.com/api/f1/current.json")
             .then(response => {
-                console.log(response.data.MRData);
-                setRace(response.data.MRData);
-                setMarkers2(response.data.MRData.RaceTable.Races);
+                //console.log(response.data.MRData);
+                setRace(response.data.MRData.RaceTable.Races);
+                //console.log(response.data.MRData);
+
+                //setMarkers2(race.RaceTable.Races);
             })
             .catch(error => {
                 console.log(error);
             });
-    }, []);
+
+
+    }
+    
+    , []);
+
+    useEffect(() => {
+        console.log(race);
+        setMarkersMap(race);
+      }, [race]);
+
+
 
     const [markers, setMarkers] = useState([]);
 
-    function setMarkers2(races) {
+    function setMarkersMap(races) {
         const currentDate = new Date();
         const newMarkers = races.map((race) => {
             const raceDate = new Date(`${race.date}T${race.time}`);
@@ -54,6 +70,8 @@ const MapChart = () => {
                 coordinates: [parseFloat(race.Circuit.Location.long), parseFloat(race.Circuit.Location.lat)],
                 tooltipText: race.Circuit.circuitName,
                 color: color,
+                date: race.date,
+                round: race.round
             };
         });
         setMarkers(newMarkers);
@@ -100,11 +118,21 @@ const MapChart = () => {
                     <Geographies geography={geoUrl}>
                         {({ geographies }) =>
                             geographies.map((geo) => (
-                                <Geography key={geo.rsmKey} geography={geo} />
+                                <Geography key={geo.rsmKey} geography={geo} style={{
+                                    default: {
+                                        outline: 'none'
+                                    },
+                                    hover: {
+                                        outline: 'none'
+                                    },
+                                    pressed: {
+                                        outline: 'none'
+                                    }
+                                }} />
                             ))
                         }
                     </Geographies>
-                    {markers.map(({ coordinates, tooltipText, color }) => (
+                    {markers.map(({ coordinates, tooltipText, color, date, round }) => (
                         <Tooltip title={tooltipText}>
                             <Marker
                                 key={`${coordinates[0]}-${coordinates[1]}`}
@@ -112,7 +140,7 @@ const MapChart = () => {
                                 onMouseEnter={() => handleMarkerMouseEnter(tooltipText)}
                                 onMouseLeave={handleMarkerMouseLeave}
                                 onClick={() => {
-                                    setClickedMarker({ coordinates, tooltipText, color });
+                                    setClickedMarker({ coordinates, tooltipText, color, date, round });
                                     setShowModal(true);
                                 }}
                             >
@@ -155,9 +183,9 @@ const MapChart = () => {
                     <Modal.Title>{clickedMarker?.tooltipText}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p>Latitude: {clickedMarker?.coordinates[1]}</p>
-                    <p>Longitude: {clickedMarker?.coordinates[0]}</p>
-                    <p>Color: {clickedMarker?.color}</p>
+                    <p>Round: {clickedMarker?.round}</p>
+                    <p>Date: {clickedMarker?.date}</p>
+
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowModal(false)}>

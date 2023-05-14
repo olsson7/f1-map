@@ -20,7 +20,7 @@ html {
   }
   .controls {
     display: flex;
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 50%;
     margin: 6.00rem 0;
