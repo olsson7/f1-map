@@ -5,7 +5,7 @@ html {
   }
   
   body {
-    margin: 100px;
+    background-color: aqua;
   }
   
   svg {
@@ -16,6 +16,9 @@ html {
 
   svg.rsm-svg {
     background-color: white;
+    margin-left: 100px;
+    margin-right: 100px;
+
 
   }
   .controls {
