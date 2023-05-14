@@ -8,6 +8,10 @@ html {
     background-color: aqua;
   }
   
+  img.logo {
+    width: 35px;
+}
+  
   svg {
     display: inline-block;
     vertical-align: middle;
@@ -26,7 +30,7 @@ html {
     position: absolute;
     top: 0;
     left: 50%;
-    margin: 9.00rem 0;
+    margin: 11.00rem 0;
     text-align: center;
     transform: translateX(-50%);
   }
@@ -84,3 +88,8 @@ h1 {
   max-width: 100%;
   height: auto;
 }
+.nextRace > h2,p {
+  text-align: center;
+  margin: 0px;
+}
+

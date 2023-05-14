@@ -17,6 +17,11 @@ const MapChart = () => {
     const [tooltipText, setTooltipText] = useState("");
     const [next, setNext] = useState("");
 
+    const [result, setResult] = useState([]);
+
+    const [winner, setWinner] = useState([]);
+
+
     const [race, setRace] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [clickedMarker, setClickedMarker] = useState(null);
@@ -53,6 +58,26 @@ const MapChart = () => {
     
     , []);
 
+
+    useEffect(() => {
+        axios.get("https://ergast.com/api/f1/current/results/1.json")
+            .then(response => {
+                console.log(response.data.MRData);
+                setWinner(response.data.MRData);
+                //console.log(response.data.MRData);
+
+                //setMarkers2(race.RaceTable.Races);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+
+
+    }
+    
+    , []);
+
+
     useEffect(() => {
         axios.get("https://ergast.com/api/f1/current.json")
             .then(response => {
@@ -71,10 +96,39 @@ const MapChart = () => {
     
     , []);
 
+
+
+    useEffect(() => {
+        axios.get("http://ergast.com/api/f1/current/results?limit=10&offset=20.json")
+            .then(response => {
+                //console.log(response.data.MRData);
+                setResult(response.data.MRData);
+                //console.log(response.data.MRData);
+
+                //setMarkers2(race.RaceTable.Races);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+
+
+    }
+    
+    , []);
+
+
+
+
     useEffect(() => {
         console.log(race);
         setMarkersMap(race);
       }, [race]);
+
+
+      useEffect(() => {
+        console.log(result);
+        //setMarkersMap(race);
+      }, [result]);
 
 
 
@@ -138,10 +192,14 @@ const MapChart = () => {
 
     return (
         <div>
-    {next && next.length > 0 && <h2>F1 Season {next[0].season}</h2>}
+            <div class="nextRace">
+            {next && next.length > 0 && <h2>F1 Season {next[0].season}</h2>}
 
-    {next && next.length > 0 && <p>Next race is {next[0].raceName}</p>}
-    {next && next.length > 0 && <p>{next[0].date} , {next[0].time} </p>}
+{next && next.length > 0 && <p>Next race is {next[0].raceName}</p>}
+{next && next.length > 0 && <p>{next[0].date} , {next[0].time} </p>}
+
+            </div>
+    
 
 
            
@@ -225,6 +283,7 @@ const MapChart = () => {
                 <Modal.Body>
                     <p>Round: {clickedMarker?.round}</p>
                     <p>Date: {clickedMarker?.date}</p>
+                    //IF
                     <img src={clickedMarker?.map}alt="track" className="modal-image"></img>
 
                 </Modal.Body>

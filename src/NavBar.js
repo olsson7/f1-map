@@ -7,12 +7,13 @@ function NavBar() {
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand href="#home">F1 world map</Navbar.Brand>
+        <Navbar.Brand href="/"><img className='logo' src="./assets/flag.png" alt="Flag" />F1 world map</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
+            <Nav.Link href="/result">Results</Nav.Link>
+            <Nav.Link href="/standing">Standings</Nav.Link>
+
           </Nav>
         </Navbar.Collapse>
       </Container>
