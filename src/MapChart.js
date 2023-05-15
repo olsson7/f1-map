@@ -17,7 +17,7 @@ const MapChart = () => {
     const [tooltipText, setTooltipText] = useState("");
     const [next, setNext] = useState("");
 
-    const [result, setResult] = useState([]);
+    //const [result, setResult] = useState([]);
 
     const [winner, setWinner] = useState([]);
 
@@ -100,9 +100,11 @@ const MapChart = () => {
 
     useEffect(() => {
         axios.get("http://ergast.com/api/f1/current/results?limit=10&offset=20.json")
+
+        //https://ergast.com/api/f1/current/results?limit=1000&offset=0
             .then(response => {
                 //console.log(response.data.MRData);
-                setResult(response.data.MRData);
+                //setResult(response.data.MRData);
                 //console.log(response.data.MRData);
 
                 //setMarkers2(race.RaceTable.Races);
@@ -125,11 +127,14 @@ const MapChart = () => {
     }, [race]);
 
 
+    /**
+     
     useEffect(() => {
         console.log(result);
         //setMarkersMap(race);
     }, [result]);
 
+    */
 
 
 
@@ -200,10 +205,6 @@ const MapChart = () => {
                 {next && next.length > 0 && <p>{next[0].date} , {next[0].time.slice(0, -4)} </p>}
 
             </div>
-
-
-
-
 
             <br></br>
             <ComposableMap>
@@ -278,8 +279,9 @@ const MapChart = () => {
                 </button>
             </div>
             <Modal show={showModal} onHide={() => setShowModal(false)}>
-                <Modal.Header closeButton>
+            <Modal.Header>
                     <Modal.Title>{clickedMarker?.tooltipText}</Modal.Title>
+
                 </Modal.Header>
                 <Modal.Body>
                     <p>Round: {clickedMarker?.round}</p>

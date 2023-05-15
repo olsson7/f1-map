@@ -14,7 +14,8 @@ export default function App() {
 
     <div>
       <NavBar />
-      <BrowserRouter>
+      <div className="content-body">
+      <BrowserRouter >
         <Routes>
           <Route path="/" element={<MapChart />} />
           <Route path="/result" element={<Result />} />
@@ -22,7 +23,9 @@ export default function App() {
 
         </Routes>
       </BrowserRouter>
+      </div>
       <Footer />
+
 
     </div>
   );
