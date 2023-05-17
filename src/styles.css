@@ -5,9 +5,16 @@ html {
   }
   
   body {
-    background-color: aqua;
   }
 
+
+  nav.navbar.navbar-expand-lg.navbar-light.bg-light {
+    border-bottom: solid;
+}
+
+.text-center.p-3 {
+  border-top-style: solid;
+}
   
 
   .content-body {
