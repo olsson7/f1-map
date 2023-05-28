@@ -1,89 +1,101 @@
 html {
-    font-family: system-ui, sans-serif;
-    font-size: 1.25rem;
-    background-color: darkgray;
-  }
-  
-  body {
-  }
+  font-family: system-ui, sans-serif;
+  font-size: 1.25rem;
+  background-color: darkgray;
+}
+
+body {}
 
 
-  nav.navbar.navbar-expand-lg.navbar-light.bg-light {
-    border-bottom: solid;
+nav.navbar.navbar-expand-lg.navbar-light.bg-light {
+  border-bottom: solid;
 }
 
 .text-center.p-3 {
   border-top-style: solid;
 }
-  
 
-  .content-body {
-    min-height: 78vh;
 
-  }
+.content-body {
+  min-height: 78vh;
 
-  .teams > li {
-    background-color: white;
-  }
-
-  .teams > li > img {
-    margin-top: 10px;
-    height: 80px;
-    width: 140px;
-    display: flex;
-    margin-inline: auto;
-    background: white;
-    padding: 11px;
-    border-radius: 20px;
 }
-  
-  img.logo {
-    width: 35px;
+
+.teams>li {
+  background-color: white;
 }
-  
-  svg {
-    display: inline-block;
-    vertical-align: middle;
 
-  }
+.teams>li>img {
+  margin-top: 10px;
+  height: 80px;
+  width: 140px;
+  display: flex;
+  margin-inline: auto;
+  background: white;
+  padding: 11px;
+}
 
-  svg.rsm-svg {
-    background-color: white;
-    margin-left: 100px;
-    margin-right: 100px;
+img.logo {
+  width: 35px;
+}
+
+/*
+Race info
+*/
+.nextRace {
+  padding-bottom: 40px;
+}
 
 
-  }
-  .controls {
-    display: flex;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    margin: 12.40rem 0;
-    text-align: center;
-    transform: translateX(-50%);
-  }
-  
-  .controls > button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    height: 2rem;
-    width: 2rem;
-    background: #ff5533;
-    color: #fff;
-    border-radius: 100%;
-    border: 0;
-  }
-  .controls > button:first-child {
-    margin-right: 0.25rem;
-  }
+/*
+Map
+*/
+svg {
+  display: inline-block;
+  vertical-align: middle;
 
-  .__react_component_tooltip {
-    background-color: #333;
-    color: #fff;
-    font-size: 14px;
+}
+
+svg.rsm-svg {
+  background-color: white;
+  margin-left: 100px;
+  margin-right: 100px;
+  border-style: groove;
+
+
+}
+
+.controls {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  margin: 11.40rem 0;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.controls>button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  height: 2rem;
+  width: 2rem;
+  background: #ff5533;
+  color: #fff;
+  border-radius: 100%;
+  border: 0;
+}
+
+.controls>button:first-child {
+  margin-right: 0.25rem;
+}
+
+.__react_component_tooltip {
+  background-color: #333;
+  color: #fff;
+  font-size: 14px;
 }
 
 /* Define the styles for the tooltip */
@@ -117,7 +129,9 @@ h1 {
   max-width: 100%;
   height: auto;
 }
-.nextRace > h2,p {
+
+.nextRace>h2,
+p {
   text-align: center;
   margin: 0px;
 }
@@ -129,17 +143,133 @@ li {
   text-align: center;
   border-radius: 25px;
   margin: 5px;
- 
+
 
 }
 
+/*
+Result
+*/
 ul {
   padding-left: 15%;
   padding-right: 15%;
+  overflow-wrap: anywhere;
 }
 
 
 .row {
-  width: 959px;
   margin: 0 auto;
+  overflow-wrap: anywhere;
+
+}
+
+/*
+Standings
+*/
+
+.column {
+  padding: 10px;
+}
+
+
+
+
+@media only screen and (max-width: 600px) {
+
+/*
+Navbar
+*/
+  .navbar-expand-lg {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    text-align: center;
+
+  }
+
+  .navbar-expand-lg .dropdown-menu {
+    position: absolute;
+  }
+
+  .navbar-expand-lg .nav-link {
+    padding-right: .5rem;
+    padding-left: .5rem;
+  }
+
+  .navbar-expand-lg>.container {
+    display: table-row;
+  }
+
+  .navbar-expand-lg .navbar-collapse {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+
+
+  }
+
+  .navbar-expand-lg .navbar-toggler {
+    display: none;
+  }
+
+  a.navbar-brand {
+
+    justify-content: center;
+
+  }
+
+  /*
+  Map
+  */
+
+  svg.rsm-svg {
+    background-color: white;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/*
+Map controls
+*/
+
+.controls {
+ 
+  margin: 18.4rem 0;
+  
+}
+
+/*
+Result
+*/
+
+
+ul {
+  padding: 0;
+
+}
+
+li#title {
+  font-size: 20px;
+}
+
+table.table.table-striped.table-bordered.table-hover {
+  font-size: 10px;
+}
+
+
+
+/*
+Standings
+*/
+.row{
+  display: inline-block;
+  text-align: -webkit-center;
+
+}
+
+.content-body {
+  text-align: -webkit-center;
+}
+
+
 }

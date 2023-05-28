@@ -48,17 +48,28 @@ function Constructor() {
                aria-expanded={open[driver.Constructors[0].name]}
                >
                 <img src={process.env.PUBLIC_URL + './assets/logos/' + `${driver.Constructors[0].constructorId}` + '.png'} alt="Logo" />
-               {driver.Constructors[0].name}
+
 
                <Collapse in={open[driver.Constructors[0].name]}>
+                
                   <div id={`race-${driver.Constructors[0].name}`}>
+                  <hr></hr>
+
                   {driverInfo
                 .filter(d => d.Constructors[0].name === driver.Constructors[0].name)
                 .map(d => (
                   <div key={d.Driver.driverId}>
-                    {d.Driver.givenName} {d.Driver.familyName}
+                    <p>{d.Driver.givenName} {d.Driver.familyName}</p>
+                    <p> Birth date: {d.Driver.dateOfBirth}</p>
+                    <img src={process.env.PUBLIC_URL + './assets/drivers/' + `${d.Driver.driverId}` + '.png'} alt={'Driver picture ' + `${d.Driver.driverId}`} />
+                    
+                    <hr></hr>
+
                   </div>
+                  
+                  
                 ))}
+                
                   </div>
                 </Collapse>
                </li>

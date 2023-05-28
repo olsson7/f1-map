@@ -40,7 +40,7 @@ function Result() {
         <ul>
           {result.Races &&
             result.Races.map(race => (
-              <li
+              <li id="title"
                 key={race.round}
                 onClick={() => setOpen(prevState => ({ ...prevState, [race.round]: !prevState[race.round] }))}
                 aria-controls={`race-${race.round}`}
@@ -50,6 +50,7 @@ function Result() {
                 <Collapse in={open[race.round]}>
                   <div id={`race-${race.round}`}>
                     <Table striped bordered hover>
+                      
                       <thead>
                         <tr>
                           <th>Position</th>
