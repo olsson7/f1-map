@@ -11,17 +11,17 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
 
 ```
-Give examples
+Install node, link: https://nodejs.org/en/download
 ```
 
 ### Installing
 
 A step by step series of examples that tell you how to get a development env running
 
-Say what the step will be
+Install the following libaries:
 
 ```
-react-simple-maps —något sånt
+npm install --save react-simple-maps
 ```
 ```
 npm install react-tooltip 
@@ -32,14 +32,6 @@ npm install axios
 ```
 npm i react-router-dom
 ```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ### Run app 
 
