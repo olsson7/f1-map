@@ -8,8 +8,6 @@ function Constructor() {
     const [driverInfo, setDriverInfo] = useState([]);
     const [open, setOpen] = useState({});
 
-
-
     useEffect(() => {
         axios.get("http://ergast.com/api/f1/current/driverStandings.json")
             .then(response => {
