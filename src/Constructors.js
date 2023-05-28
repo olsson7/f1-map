@@ -1,6 +1,4 @@
-import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
-import Table from 'react-bootstrap/Table';
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -17,8 +15,8 @@ function Constructor() {
             .then(response => {
                 const driverStandings = response.data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
                 const sortedDriverStandings = driverStandings.sort((a, b) => {
-                    // Sort by constructor name
-                    const constructorA = a.Constructors[0].name.toUpperCase();
+
+                  const constructorA = a.Constructors[0].name.toUpperCase();
                     const constructorB = b.Constructors[0].name.toUpperCase();
                     if (constructorA < constructorB) {
                         return -1;
