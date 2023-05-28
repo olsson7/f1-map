@@ -36,6 +36,18 @@ function Constructor() {
             });
     }, []);
 
+
+    const calculateAge = (birthdate) => {
+      const currentDate = new Date();
+      const birthDate = new Date(birthdate);
+      let age = currentDate.getFullYear() - birthDate.getFullYear();
+      const monthDiff = currentDate.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && currentDate.getDate() < birthDate.getDate())) {
+          age--;
+      }
+      return age;
+  };
+
     return (
         <>
         {driverInfo.map((driver, index) => (
@@ -57,18 +69,18 @@ function Constructor() {
 
                   {driverInfo
                 .filter(d => d.Constructors[0].name === driver.Constructors[0].name)
-                .map(d => (
-                  <div key={d.Driver.driverId}>
-                    <p>{d.Driver.givenName} {d.Driver.familyName}</p>
-                    <p> Birth date: {d.Driver.dateOfBirth}</p>
-                    <img src={process.env.PUBLIC_URL + './assets/drivers/' + `${d.Driver.driverId}` + '.png'} alt={'Driver picture ' + `${d.Driver.driverId}`} />
-                    
-                    <hr></hr>
+                  .map(d => {
+                    const age = calculateAge(d.Driver.dateOfBirth);
+                    return (
+                        <div key={d.Driver.driverId}>
+                            <p>{d.Driver.givenName} {d.Driver.familyName}</p>
+                            <p>Age: {age}</p>
+                            <img src={process.env.PUBLIC_URL + './assets/drivers/' + `${d.Driver.driverId}` + '.png'} alt={'Driver picture ' + `${d.Driver.driverId}`} />
 
-                  </div>
-                  
-                  
-                ))}
+                            <hr></hr>
+                        </div>
+                    );
+                })}
                 
                   </div>
                 </Collapse>
