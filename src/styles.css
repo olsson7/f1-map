@@ -43,7 +43,7 @@ img.logo {
 Race info
 */
 .nextRace {
-  padding-bottom: 40px;
+  padding-bottom: 20px;
 }
 
 
@@ -67,12 +67,12 @@ svg.rsm-svg {
 
 .controls {
   display: flex;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  margin: 11.40rem 0;
+  /* position: absolute; */
+ 
+  /* margin: 11.4rem 0; */
   text-align: center;
-  transform: translateX(-50%);
+  justify-content: center;
+  /* transform: translateX(-50%); */
 }
 
 .controls>button {
@@ -232,11 +232,7 @@ Navbar
 Map controls
 */
 
-.controls {
- 
-  margin: 18.4rem 0;
-  
-}
+
 
 /*
 Result

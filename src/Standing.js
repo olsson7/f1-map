@@ -7,7 +7,6 @@ import axios from "axios";
 function Standing() {
 
     const [open, setOpen] = useState(false);
-
     const [driverStandings, setDriversStandings] = useState([]);
     const [constructorStandings, setConstructorStandings] = useState([]);
 
@@ -40,9 +39,9 @@ function Standing() {
     return (
 
         <>
-            <div class='row'>
+            <div className='row'>
 
-                <div class='column'>
+                <div className='column'>
 
                     <h3>Drivers Standings</h3>
                     <Table striped bordered hover>
@@ -65,7 +64,7 @@ function Standing() {
                         </Table>
 
                 </div>
-                <div class='column'>
+                <div className='column'>
 
                 <div />
                 <h3>Constructors Standings</h3>

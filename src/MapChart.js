@@ -14,10 +14,7 @@ const geoUrl = "/features.json";
 
 const MapChart = () => {
     const [position, setPosition] = useState({ coordinates: [0, 0], zoom: 1 });
-    const [tooltipText, setTooltipText] = useState("");
     const [next, setNext] = useState("");
-
-    //const [result, setResult] = useState([]);
 
     const [winner, setWinner] = useState([]);
 
@@ -81,42 +78,17 @@ const MapChart = () => {
     useEffect(() => {
         axios.get("https://ergast.com/api/f1/current.json")
             .then(response => {
-                //console.log(response.data.MRData);
                 setRace(response.data.MRData.RaceTable.Races);
-                //console.log(response.data.MRData);
-
-                //setMarkers2(race.RaceTable.Races);
             })
             .catch(error => {
                 console.log(error);
             });
-
-
     }
-
         , []);
 
 
 
-    useEffect(() => {
-        axios.get("http://ergast.com/api/f1/current/results?limit=10&offset=20.json")
 
-        //https://ergast.com/api/f1/current/results?limit=1000&offset=0
-            .then(response => {
-                //console.log(response.data.MRData);
-                //setResult(response.data.MRData);
-                //console.log(response.data.MRData);
-
-                //setMarkers2(race.RaceTable.Races);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-
-
-    }
-
-        , []);
 
 
 
@@ -127,14 +99,7 @@ const MapChart = () => {
     }, [race]);
 
 
-    /**
-     
-    useEffect(() => {
-        console.log(result);
-        //setMarkersMap(race);
-    }, [result]);
 
-    */
 
 
 
@@ -180,30 +145,47 @@ const MapChart = () => {
         setPosition(position);
     }
 
-    function handleMarkerMouseEnter(event) {
-        console.log(event);
-    }
 
-    function handleMarkerMouseLeave() {
-        setTooltipText("");
-    }
-    function handleMarkerClick(marker) {
-        setClickedMarker(marker);
-        setShowModal(true);
-    }
-
-    function handleCloseModal() {
-        setShowModal(false);
-    }
+    
+    
 
     return (
         <div>
-            <div class="nextRace">
-                {next && next.length > 0 && <h2>F1 Season {next[0].season}</h2>}
+            <div className="nextRace">
+                {next && next.length > 0 &&<h2>F1 Season {next[0].season}</h2>}
                 {next && next.length > 0 && <p>Next race is {next[0].raceName}</p>}
                 {next && next.length > 0 && <p>Round {next[0].round}</p>}
                 {next && next.length > 0 && <p>{next[0].date} , {next[0].time.slice(0, -4)} </p>}
+            </div>
 
+
+            <div className="controls">
+
+                <button onClick={handleZoomIn}>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                    >
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                </button>
+                <button onClick={handleZoomOut}>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                    >
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                </button>
             </div>
 
             <br></br>
@@ -231,12 +213,10 @@ const MapChart = () => {
                         }
                     </Geographies>
                     {markers.map(({ coordinates, tooltipText, color, date, round, map, hasHappend }) => (
-                        <Tooltip title={tooltipText}>
+                        <Tooltip key={round} title={tooltipText}>
                             <Marker
                                 key={`${coordinates[0]}-${coordinates[1]}`}
                                 coordinates={coordinates}
-                                onMouseEnter={() => handleMarkerMouseEnter(this)}
-                                onMouseLeave={handleMarkerMouseLeave}
                                 onClick={() => {
                                     setClickedMarker({ coordinates, tooltipText, color, date, round, map, hasHappend });
                                     setShowModal(true);
@@ -251,57 +231,23 @@ const MapChart = () => {
 
                 </ZoomableGroup>
             </ComposableMap>
-            <div className="controls">
-                <button onClick={handleZoomIn}>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                    >
-                        <line x1="12" y1="5" x2="12" y2="19" />
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                    </svg>
-                </button>
-                <button onClick={handleZoomOut}>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                    >
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                    </svg>
-                </button>
-            </div>
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
-            <Modal.Header>
-                    <Modal.Title>{clickedMarker?.tooltipText}</Modal.Title>
 
+            
+           
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header>
+                    <Modal.Title>{clickedMarker?.tooltipText}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <p>Round: {clickedMarker?.round}</p>
                     <p>Date: {clickedMarker?.date}</p>
-
                     <p>{clickedMarker?.hasHappend}</p>
-
                     {clickedMarker?.hasHappend && (
-                        
-                            <p>Winner: {winner[clickedMarker?.round-1].Results[0].Driver.givenName} {winner[clickedMarker?.round-1].Results[0].Driver.familyName}</p>
-                        
-                    )}   
+                        <p>Winner: {winner[clickedMarker?.round - 1].Results[0].Driver.givenName} {winner[clickedMarker?.round - 1].Results[0].Driver.familyName}</p>
+                    )}
                     {clickedMarker?.hasHappend && (
-                        
                         <p><a href="/result">See full result</a></p>
-                    
-                )}  
-
-
-                 
+                    )}
                     <img src={clickedMarker?.map} alt="track" className="modal-image"></img>
 
                 </Modal.Body>

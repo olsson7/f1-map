@@ -1,4 +1,4 @@
-# Project Title
+# F1 Map
 
 One Paragraph of project description goes here
 
@@ -18,20 +18,12 @@ Install node, link: https://nodejs.org/en/download
 
 A step by step series of examples that tell you how to get a development env running
 
-Install the following libaries:
+Install the libaries:
 
 ```
-npm install --save react-simple-maps
+npm install
 ```
-```
-npm install react-tooltip 
-```
-```
-npm install axios
-```
-```
-npm i react-router-dom
-```
+
 
 ### Run app 
 
@@ -89,3 +81,49 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * Hat tip to anyone whose code was used
 * Inspiration
 * etc
+
+
+
+
+
+# F1Map <img src="https://www.svgrepo.com/show/17072/football.svg" width=4% height=4%>
+
+En Vue.js-applikation  visar live-resultat och matchinformation för fotbollsmatcher för top 5 ligorna i Europa. Även Champions League visas. Komponenten använder sig av [Football-data API](https://www.football-data.org/). 
+Tillåter även dig som användare att spara dina favoritlag. 
+
+## Installation
+* Klona detta repository.
+```bash
+git clone 
+cd dir
+```
+
+* Se till att du har node.js installerat på din dator genom att köra nedan kommando i valfri terminal
+```javascript
+node -v
+```
+* Om du fick att node.js inte kunde hittas så kan du ladda ner det [här](https://nodejs.org/en/download)
+
+
+* Kör nedan kommando i projektets katalog för att installera nödvändiga paket.
+```javascript
+npm install
+``` 
+
+
+
+* Kör sedan nedan kommando för att starta servern.
+```javascript
+npm start
+```
+
+## Teknologier som används
+* [Vue.js](https://vuejs.org/)
+* [axios](https://github.com/axios/axios)
+* [Football-data API](https://www.football-data.org/)
+* [Bootstrap 5.2](https://getbootstrap.com/docs/5.3/getting-started/introduction/)
+* [Ikoner](https://pictogrammers.com/library/mdi/)
+
+
+## Licens
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
