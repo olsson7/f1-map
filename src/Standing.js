@@ -1,33 +1,30 @@
 
 import Table from 'react-bootstrap/Table';
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function Standing() {
 
-    const [open, setOpen] = useState(false);
     const [driverStandings, setDriversStandings] = useState([]);
     const [constructorStandings, setConstructorStandings] = useState([]);
 
 
-
+    //Sets driver standing 
     useEffect(() => {
         axios.get("http://ergast.com/api/f1/current/driverStandings.json")
             .then(response => {
                 setDriversStandings(response.data.MRData.StandingsTable.StandingsLists[0].DriverStandings);
-                console.log(response.data.MRData.StandingsTable.StandingsLists[0].DriverStandings);
             })
             .catch(error => {
                 console.log(error);
             });
     }, []);
 
+    //Sets constuctor standing
     useEffect(() => {
         axios.get("https://ergast.com/api/f1/current/constructorStandings.json")
             .then(response => {
                 setConstructorStandings(response.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings);
-                console.log(response.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings);
             })
             .catch(error => {
                 console.log(error);
@@ -36,14 +33,14 @@ function Standing() {
 
 
 
+    //Showing two tables of data
     return (
 
         <>
             <div className='row'>
-
                 <div className='column'>
-
                     <h3>Drivers Standings</h3>
+                    
                     <Table striped bordered hover>
                         <thead>
                             <tr>

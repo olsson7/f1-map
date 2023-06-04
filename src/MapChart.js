@@ -10,71 +10,41 @@ import {
     ZoomableGroup,
     Marker
 } from "react-simple-maps";
+
 const geoUrl = "/features.json";
 
 const MapChart = () => {
     const [position, setPosition] = useState({ coordinates: [0, 0], zoom: 1 });
     const [next, setNext] = useState("");
-
     const [winner, setWinner] = useState([]);
-
-
     const [race, setRace] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [clickedMarker, setClickedMarker] = useState(null);
+    const [markers, setMarkers] = useState([]);
 
-    useEffect(() => {
-        axios.get("https://ergast.com/api/f1/current.json")
-            .then(response => {
-                //console.log(response.data.MRData);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-
-    },
-
-        []);
-
-
+    //Get next race
     useEffect(() => {
         axios.get("https://ergast.com/api/f1/current/next.json")
             .then(response => {
-                //console.log(response.data.MRData);
                 setNext(response.data.MRData.RaceTable.Races);
-                console.log(response.data.MRData.RaceTable.Races);
-
-                //setMarkers2(race.RaceTable.Races);
             })
             .catch(error => {
                 console.log(error);
             });
+    }, []);
 
-
-    }
-
-        , []);
-
-
+    //Get winner from each race
     useEffect(() => {
         axios.get("https://ergast.com/api/f1/current/results/1.json")
             .then(response => {
-                console.log(response.data.MRData);
                 setWinner(response.data.MRData.RaceTable.Races);
-                //console.log(response.data.MRData);
-
-                //setMarkers2(race.RaceTable.Races);
             })
             .catch(error => {
                 console.log(error);
             });
+    }, []);
 
-
-    }
-
-        , []);
-
-
+    //Get all races for current season
     useEffect(() => {
         axios.get("https://ergast.com/api/f1/current.json")
             .then(response => {
@@ -83,40 +53,23 @@ const MapChart = () => {
             .catch(error => {
                 console.log(error);
             });
-    }
-        , []);
+    }, []);
 
-
-
-
-
-
-
-
+    //Populate markers
     useEffect(() => {
-        console.log(race);
         setMarkersMap(race);
     }, [race]);
 
-
-
-
-
-
-
-
-    const [markers, setMarkers] = useState([]);
-
+    //Set markers with info. 
     function setMarkersMap(races) {
         const currentDate = new Date();
-        const newMarkers = races.map((race) => {
-            const raceDate = new Date(`${race.date}T${race.time}`);
-            const hasRaceHappened = currentDate > raceDate;
-            const color = hasRaceHappened ? "#F53" : "#00FF00";
 
-            let logo_path = race.Circuit.circuitName.split(' ').join('-');
-            //console.log(logo_path); 
-            const logos = process.env.PUBLIC_URL + './assets/' + `${logo_path}` + '.png';
+        const newMarkers = races.map((race) => {
+        const raceDate = new Date(`${race.date}T${race.time}`);
+        const hasRaceHappened = currentDate > raceDate;
+        const color = hasRaceHappened ? "#F53" : "#00FF00";
+        let logo_path = race.Circuit.circuitName.split(' ').join('-');
+        const logos = process.env.PUBLIC_URL + './assets/' + `${logo_path}` + '.png';
 
             return {
                 coordinates: [parseFloat(race.Circuit.Location.long), parseFloat(race.Circuit.Location.lat)],
@@ -131,36 +84,28 @@ const MapChart = () => {
         setMarkers(newMarkers);
     }
 
+    //Zoom in function
     function handleZoomIn() {
         if (position.zoom >= 4) return;
         setPosition((pos) => ({ ...pos, zoom: pos.zoom * 1.33 }));
     }
 
+    //Zoom out function
     function handleZoomOut() {
         if (position.zoom <= 1) return;
         setPosition((pos) => ({ ...pos, zoom: pos.zoom / 1.33 }));
     }
-
-    function handleMoveEnd(position) {
-        setPosition(position);
-    }
-
-
     
-    
-
+    //Render map with markers. Tooltip on hover. Modal open when clicked. 
     return (
         <div>
             <div className="nextRace">
-                {next && next.length > 0 &&<h2>F1 Season {next[0].season}</h2>}
+                <h2>F1 Season {next[0]?.season}</h2>
                 {next && next.length > 0 && <p>Next race is {next[0].raceName}</p>}
                 {next && next.length > 0 && <p>Round {next[0].round}</p>}
                 {next && next.length > 0 && <p>{next[0].date} , {next[0].time.slice(0, -4)} </p>}
             </div>
-
-
             <div className="controls">
-
                 <button onClick={handleZoomIn}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -189,11 +134,11 @@ const MapChart = () => {
             </div>
 
             <br></br>
+
             <ComposableMap>
                 <ZoomableGroup
                     zoom={position.zoom}
                     center={position.coordinates}
-                    onMoveEnd={handleMoveEnd}
                 >
                     <Geographies geography={geoUrl}>
                         {({ geographies }) =>
@@ -215,7 +160,6 @@ const MapChart = () => {
                     {markers.map(({ coordinates, tooltipText, color, date, round, map, hasHappend }) => (
                         <Tooltip key={round} title={tooltipText}>
                             <Marker
-                                key={`${coordinates[0]}-${coordinates[1]}`}
                                 coordinates={coordinates}
                                 onClick={() => {
                                     setClickedMarker({ coordinates, tooltipText, color, date, round, map, hasHappend });
@@ -224,16 +168,13 @@ const MapChart = () => {
                             >
                                 <circle r={4} fill={color} />
                                 <text textAnchor="middle" fill="black" fontSize="6px" fontFamily="Arial" dy=".3em">{round}</text>
-
                             </Marker>
                         </Tooltip>
                     ))}
-
                 </ZoomableGroup>
             </ComposableMap>
 
-            
-           
+
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header>
                     <Modal.Title>{clickedMarker?.tooltipText}</Modal.Title>

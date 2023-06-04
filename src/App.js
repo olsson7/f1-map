@@ -11,8 +11,6 @@ import Constructors from './Constructors.js'
 
 export default function App() {
   return (
-
-
     <div>
       <NavBar />
       <div className="content-body">
@@ -22,14 +20,10 @@ export default function App() {
           <Route path="/result" element={<Result />} />
           <Route path="/standing" element={<Standing />} />
           <Route path="/constructor" element={<Constructors />} />
-
-
         </Routes>
       </BrowserRouter>
       </div>
       <Footer />
-
-
     </div>
   );
 }

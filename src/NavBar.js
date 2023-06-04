@@ -13,8 +13,6 @@ function NavBar() {
             <Nav.Link href="/result">Results</Nav.Link>
             <Nav.Link href="/standing">Standings</Nav.Link>
             <Nav.Link href="/constructor">Constructors</Nav.Link>
-
-
           </Nav>
         </Navbar.Collapse>
       </Container>
