@@ -1,5 +1,5 @@
 
-# F1 Map <img src="assets/flag.png" width=4% height=4%>
+# F1 Map <img src="https://w7.pngwing.com/pngs/306/688/png-transparent-red-flag-white-flag-red-flag-miscellaneous-flag-rectangle.png" width=4% height=4%>
 
 React projekt som visar en karta över alla F1 lopp under aktuell säsong. Kartan är interaktiv där man kan klicka på punkter på kartan för att se information om loppet. Utöver detta visas resultat från varje lopp, förar & konstuktionsställning och vilka förare som tillhör vilka team. 
 Projektet använder sig av [Ergast Developer API](http://ergast.com/mrd/). 
