@@ -55,7 +55,7 @@ function Constructor() {
               aria-controls={`race-${driver.Constructors[0].name}`}
               aria-expanded={open[driver.Constructors[0].name]}
             >
-              <img src={process.env.PUBLIC_URL + './assets/logos/' + `${driver.Constructors[0].constructorId}` + '.png'} alt="Logo" />
+              <img src={'./assets/logos/' + `${driver.Constructors[0].constructorId}` + '.png'} alt="Logo" />
               <Collapse in={open[driver.Constructors[0].name]}>
                 <div id={`race-${driver.Constructors[0].name}`}>
 
@@ -69,7 +69,7 @@ function Constructor() {
                         <div key={d.Driver.driverId}>
                           <p>{d.Driver.givenName} {d.Driver.familyName}</p>
                           <p>Age: {age}</p>
-                          <img src={process.env.PUBLIC_URL + './assets/drivers/' + `${d.Driver.driverId}` + '.png'} alt={'Driver picture ' + `${d.Driver.driverId}`} />
+                          <img src={'./assets/drivers/' + `${d.Driver.driverId}` + '.png'} alt={'Driver picture ' + `${d.Driver.driverId}`} />
 
                           <hr></hr>
                         </div>
