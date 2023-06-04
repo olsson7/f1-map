@@ -4,28 +4,27 @@ html {
   background-color: darkgray;
 }
 
-body {}
-
 
 nav.navbar.navbar-expand-lg.navbar-light.bg-light {
   border-bottom: solid;
+  border-width: thin;
 }
 
 .text-center.p-3 {
   border-top-style: solid;
+  border-width: thin;
 }
 
 
 .content-body {
   min-height: 78vh;
-
 }
 
 .teams>li {
   background-color: white;
 }
 
-.teams>li>img {
+.teams > li > img {
   margin-top: 10px;
   height: 80px;
   width: 140px;
@@ -228,9 +227,6 @@ Navbar
     margin-right: 10px;
 }
 
-/*
-Map controls
-*/
 
 
 
