@@ -11,7 +11,7 @@ function Standing() {
 
     //Sets driver standing 
     useEffect(() => {
-        axios.get("http://ergast.com/api/f1/current/driverStandings.json")
+        axios.get("https://ergast.com/api/f1/current/driverStandings.json")
             .then(response => {
                 setDriversStandings(response.data.MRData.StandingsTable.StandingsLists[0].DriverStandings);
             })

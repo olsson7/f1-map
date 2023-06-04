@@ -9,7 +9,7 @@ function Constructor() {
 
   //Get drivers and sort by constructor. 
   useEffect(() => {
-    axios.get("http://ergast.com/api/f1/current/driverStandings.json")
+    axios.get("https://ergast.com/api/f1/current/driverStandings.json")
       .then(response => {
         const driverStandings = response.data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
         const sortedDriverStandings = driverStandings.sort((a, b) => {
