@@ -4,6 +4,8 @@
 React projekt som visar en karta över alla F1 lopp under aktuell säsong. Kartan är interaktiv där man kan klicka på punkter på kartan för att se information om loppet. Utöver detta visas resultat från varje lopp, förar & konstuktionsställning och vilka förare som tillhör vilka team. 
 Projektet använder sig av [Ergast Developer API](http://ergast.com/mrd/). 
 
+* Se live [F1 Map](https://f1-map.vercel.app/)
+
 ## Installation
 * Klona detta repository.
 ```bash
