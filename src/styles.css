@@ -20,6 +20,10 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light {
   min-height: 78vh;
 }
 
+.StandingsContent {
+  display: flex;
+}
+
 .teams>li {
   background-color: white;
 }
@@ -89,6 +93,10 @@ svg.rsm-svg {
 
 .controls>button:first-child {
   margin-right: 0.25rem;
+}
+
+.Highlight {
+  text-align: center;
 }
 
 .__react_component_tooltip {

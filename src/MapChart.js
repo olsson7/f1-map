@@ -21,6 +21,30 @@ const MapChart = () => {
     const [showModal, setShowModal] = useState(false);
     const [clickedMarker, setClickedMarker] = useState(null);
     const [markers, setMarkers] = useState([]);
+    const [videos, setVideos] = useState([]);
+
+
+    const fetchVideos = async () => {
+        try {
+          const response = await axios.get(
+            "https://www.googleapis.com/youtube/v3/playlistItems",
+            {
+              params: {
+                part: "snippet",
+                playlistId: "PLfoNZDHitwjX-oU5YVAkfuXkALZqempRS",
+                key: process.env.REACT_APP_YOUTUBE_API_KEY,
+                maxResults: 25,
+              },
+            }
+          );
+          console.log(response.data.items);
+          setVideos(response.data.items);
+        } catch (error) {
+          console.error("Error fetching videos:", error);
+        }
+      };
+
+   
 
     //Get next race
     useEffect(() => {
@@ -60,16 +84,24 @@ const MapChart = () => {
         setMarkersMap(race);
     }, [race]);
 
+
+    useEffect(() => {
+        fetchVideos();
+      }, []);
+
     //Set markers with info. 
     function setMarkersMap(races) {
         const currentDate = new Date();
 
-        const newMarkers = races.map((race) => {
+        const newMarkers = races.map((race, index) => {
         const raceDate = new Date(`${race.date}T${race.time}`);
         const hasRaceHappened = currentDate > raceDate;
         const color = hasRaceHappened ? "#F53" : "#00FF00";
         let logo_path = race.Circuit.circuitName.split(' ').join('-');
         const logos = process.env.PUBLIC_URL + './assets/' + `${logo_path}` + '.png';
+
+        const video = videos[index];
+        const videoId = video?.snippet?.resourceId?.videoId || "";
 
             return {
                 coordinates: [parseFloat(race.Circuit.Location.long), parseFloat(race.Circuit.Location.lat)],
@@ -78,7 +110,8 @@ const MapChart = () => {
                 date: race.date,
                 round: race.round,
                 map: logos,
-                hasHappend: hasRaceHappened
+                hasHappend: hasRaceHappened,
+                videoId: videoId,
             };
         });
         setMarkers(newMarkers);
@@ -157,12 +190,12 @@ const MapChart = () => {
                             ))
                         }
                     </Geographies>
-                    {markers.map(({ coordinates, tooltipText, color, date, round, map, hasHappend }) => (
+                    {markers.map(({ coordinates, tooltipText, color, date, round, map, hasHappend, videoId  }) => (
                         <Tooltip key={round} title={tooltipText}>
                             <Marker
                                 coordinates={coordinates}
                                 onClick={() => {
-                                    setClickedMarker({ coordinates, tooltipText, color, date, round, map, hasHappend });
+                                    setClickedMarker({ coordinates, tooltipText, color, date, round, map, hasHappend, videoId });
                                     setShowModal(true);
                                 }}
                             >
@@ -190,6 +223,21 @@ const MapChart = () => {
                         <p><a href="/result">See full result</a></p>
                     )}
                     <img src={clickedMarker?.map} alt="track" className="modal-image"></img>
+
+
+                    {clickedMarker?.videoId && (
+      <div className="Highlight">
+        <p>Highlights</p>
+        <iframe
+          width="360"
+          height="315"
+          src={`https://www.youtube.com/embed/${clickedMarker.videoId}`}
+          title="YouTube video player"
+          frameBorder="0"
+          allowFullScreen
+        ></iframe>
+      </div>
+    )}
 
                 </Modal.Body>
                 <Modal.Footer>

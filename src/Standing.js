@@ -37,6 +37,10 @@ function Standing() {
     return (
 
         <>
+        <div className='StandingsContent'>
+
+
+        
             <div className='row'>
                 <div className='column'>
                     <h3>Drivers Standings</h3>
@@ -86,6 +90,7 @@ function Standing() {
             </div>
 
 
+        </div>
         </div>
 
 
