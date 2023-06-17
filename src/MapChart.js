@@ -32,7 +32,7 @@ const MapChart = () => {
               params: {
                 part: "snippet",
                 playlistId: "PLfoNZDHitwjX-oU5YVAkfuXkALZqempRS",
-                key: process.env.REACT_APP_YOUTUBE_API_KEY,
+                key: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY,
                 maxResults: 25,
               },
             }
