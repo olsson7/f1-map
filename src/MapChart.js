@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
 import Tooltip from '@mui/material/Tooltip';
 import axios from "axios";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { format } from 'date-fns';
+import FlipCountdown from '@rumess/react-flip-countdown';
 
 import {
     ComposableMap,
@@ -24,6 +25,8 @@ const MapChart = () => {
     const [clickedMarker, setClickedMarker] = useState(null);
     const [markers, setMarkers] = useState([]);
     const [videos, setVideos] = useState([]);
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
+
 
 
     const fetchVideos = async () => {
@@ -131,140 +134,184 @@ const MapChart = () => {
         setPosition((pos) => ({ ...pos, zoom: pos.zoom / 1.33 }));
     }
 
-    Date.prototype.addHours = function (hours) {
-  this.setHours(this.getHours());
-  return this;
+    // Check if the screen size is smaller than 600px
+    useEffect(() => {
+        const handleResize = () => {
+            setIsSmallScreen(window.innerWidth < 600);
+        };
+        handleResize(); // Call the function on initial load
+        window.addEventListener("resize", handleResize); // Add event listener to update on window resize
+        return () => {
+            window.removeEventListener("resize", handleResize); // Clean up the event listener on component unmount
+        };
+    }, []);
+
+
+    var testTime = '2023-06-18 17:54:25'
+
+
+    const isRaceToday = next.length > 0 && new Date(next[0].date).toDateString() === new Date().toDateString();
+
+
+
+
+    //Render map with markers. Tooltip on hover. Modal open when clicked. 
+    return (
+        <div>
+
+            <div className="nextRace">
+                <h2>F1 Season {next[0]?.season}</h2>
+                {next && next.length > 0 && <p>Next race is {next[0].raceName}</p>}
+                {next && next.length > 0 && <p>Round {next[0].round}</p>}
+                {next && next.length > 0 && <p>{next[0].date}, {format(
+                    new Date(`${next[0].date}T${next[0].time}`),
+                    "HH:mm"
+                )} </p>}
+
+                {next && next.length > 0 && (
+                    <p>
+                        {new Date(`${next[0].date}T${next[0].time}`) > new Date(Date.now()) ? ( //${next[0].date}T${next[0].time}
+                            <>
+                                <FlipCountdown
+                                    hideYear={new Date(next[0].date) - new Date() < 31536000000} // Hide year if the race is sooner than 1 year (31536000000 milliseconds)
+                                    hideMonth={new Date(next[0].date) - new Date() < 2592000000} // Hide month if the race is sooner than 30 days (2592000000 milliseconds)
+                                    hideDay={new Date(next[0].date) - new Date() < 86400000} // Hide day if the race is sooner than 1 day (86400000 milliseconds)
+                                    hourTitle="Hours"
+                                    minuteTitle="Minutes"
+                                    secondTitle="Seconds"
+                                    size={isSmallScreen ? 'small' : 'medium'}
+                                    endAt={`${next[0].date} ${next[0].time}`} // Use the race date and time as the end point
+                                    onTimeUp={() => console.log("Time's up ⏳")}
+                                />
+                            </>
+                        ) : (
+                            <p className="RaceText">Race is live</p>
+                        )}
+                    </p>
+
+
+                )}
+
+
+                {isRaceToday && (
+                    <iframe
+                        src="https://www.tvmatchen.nu/widget/648f2a2556c4f?heading=F1&border_color=gray&autoscroll=1"
+                        frameborder="0"
+                        className="widget"
+                    ></iframe>
+                )}
+
+            </div>
+            <div className="controls">
+                <button onClick={handleZoomIn}>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                    >
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                </button>
+                <button onClick={handleZoomOut}>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                    >
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                </button>
+            </div>
+
+            <br></br>
+
+            <ComposableMap>
+                <ZoomableGroup
+                    zoom={position.zoom}
+                    center={position.coordinates}
+                >
+                    <Geographies geography={geoUrl}>
+                        {({ geographies }) =>
+                            geographies.map((geo) => (
+                                <Geography key={geo.rsmKey} geography={geo} style={{
+                                    default: {
+                                        outline: 'none'
+                                    },
+                                    hover: {
+                                        outline: 'none'
+                                    },
+                                    pressed: {
+                                        outline: 'none'
+                                    }
+                                }} />
+                            ))
+                        }
+                    </Geographies>
+                    {markers.map(({ coordinates, tooltipText, color, date, round, map, hasHappend, videoId }) => (
+                        <Tooltip key={round} title={tooltipText}>
+                            <Marker
+                                coordinates={coordinates}
+                                onClick={() => {
+                                    setClickedMarker({ coordinates, tooltipText, color, date, round, map, hasHappend, videoId });
+                                    setShowModal(true);
+                                }}
+                            >
+                                <circle r={4} fill={color} />
+                                <text textAnchor="middle" fill="black" fontSize="6px" fontFamily="Arial" dy=".3em">{round}</text>
+                            </Marker>
+                        </Tooltip>
+                    ))}
+                </ZoomableGroup>
+            </ComposableMap>
+
+
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header>
+                    <Modal.Title>{clickedMarker?.tooltipText}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Round: {clickedMarker?.round}</p>
+                    <p>Date: {clickedMarker?.date}</p>
+                    <p>{clickedMarker?.hasHappend}</p>
+                    {clickedMarker?.hasHappend && (
+                        <p>Winner: {winner[clickedMarker?.round - 1].Results[0].Driver.givenName} {winner[clickedMarker?.round - 1].Results[0].Driver.familyName}</p>
+                    )}
+                    {clickedMarker?.hasHappend && (
+                        <p><a href="/result">See full result</a></p>
+                    )}
+                    <img src={clickedMarker?.map} alt="track" className="modal-image"></img>
+
+
+                    {clickedMarker?.videoId && (
+                        <div className="Highlight">
+                            <p>Highlights</p>
+                            <iframe
+                                width="360"
+                                height="315"
+                                src={`https://www.youtube.com/embed/${clickedMarker.videoId}`}
+                                title="YouTube video player"
+                                frameBorder="0"
+                                allowFullScreen
+                            ></iframe>
+                        </div>
+                    )}
+
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </div>
+    );
 };
 
-
-   
-
-        //Render map with markers. Tooltip on hover. Modal open when clicked. 
-        return (
-            <div>
-                <div className="nextRace">
-                    <h2>F1 Season {next[0]?.season}</h2>
-                    {next && next.length > 0 && <p>Next race is {next[0].raceName}</p>}
-                    {next && next.length > 0 && <p>Round {next[0].round}</p>}
-                    {next && next.length > 0 && (
-   <p>
-   {next[0].date}, {format(
-     new Date(`${next[0].date}T${next[0].time}`),
-     "HH:mm"
-   )} <br />
-   
- </p>
-)}                </div>
-                <div className="controls">
-                    <button onClick={handleZoomIn}>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth="3"
-                        >
-                            <line x1="12" y1="5" x2="12" y2="19" />
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                    </button>
-                    <button onClick={handleZoomOut}>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth="3"
-                        >
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                    </button>
-                </div>
-
-                <br></br>
-
-                <ComposableMap>
-                    <ZoomableGroup
-                        zoom={position.zoom}
-                        center={position.coordinates}
-                    >
-                        <Geographies geography={geoUrl}>
-                            {({ geographies }) =>
-                                geographies.map((geo) => (
-                                    <Geography key={geo.rsmKey} geography={geo} style={{
-                                        default: {
-                                            outline: 'none'
-                                        },
-                                        hover: {
-                                            outline: 'none'
-                                        },
-                                        pressed: {
-                                            outline: 'none'
-                                        }
-                                    }} />
-                                ))
-                            }
-                        </Geographies>
-                        {markers.map(({ coordinates, tooltipText, color, date, round, map, hasHappend, videoId }) => (
-                            <Tooltip key={round} title={tooltipText}>
-                                <Marker
-                                    coordinates={coordinates}
-                                    onClick={() => {
-                                        setClickedMarker({ coordinates, tooltipText, color, date, round, map, hasHappend, videoId });
-                                        setShowModal(true);
-                                    }}
-                                >
-                                    <circle r={4} fill={color} />
-                                    <text textAnchor="middle" fill="black" fontSize="6px" fontFamily="Arial" dy=".3em">{round}</text>
-                                </Marker>
-                            </Tooltip>
-                        ))}
-                    </ZoomableGroup>
-                </ComposableMap>
-
-
-                <Modal show={showModal} onHide={() => setShowModal(false)}>
-                    <Modal.Header>
-                        <Modal.Title>{clickedMarker?.tooltipText}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p>Round: {clickedMarker?.round}</p>
-                        <p>Date: {clickedMarker?.date}</p>
-                        <p>{clickedMarker?.hasHappend}</p>
-                        {clickedMarker?.hasHappend && (
-                            <p>Winner: {winner[clickedMarker?.round - 1].Results[0].Driver.givenName} {winner[clickedMarker?.round - 1].Results[0].Driver.familyName}</p>
-                        )}
-                        {clickedMarker?.hasHappend && (
-                            <p><a href="/result">See full result</a></p>
-                        )}
-                        <img src={clickedMarker?.map} alt="track" className="modal-image"></img>
-
-
-                        {clickedMarker?.videoId && (
-                            <div className="Highlight">
-                                <p>Highlights</p>
-                                <iframe
-                                    width="360"
-                                    height="315"
-                                    src={`https://www.youtube.com/embed/${clickedMarker.videoId}`}
-                                    title="YouTube video player"
-                                    frameBorder="0"
-                                    allowFullScreen
-                                ></iframe>
-                            </div>
-                        )}
-
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowModal(false)}>
-                            Close
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            </div>
-        );
-    };
-
-    export default MapChart;
+export default MapChart;
