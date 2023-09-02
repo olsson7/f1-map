@@ -7,6 +7,7 @@ import NavBar from "./NavBar.js"
 import Result from "./Result.js";
 import Standing from "./Standing.js";
 import Footer from "./Footer.js"
+import Sprint from "./Sprint.js"
 import Constructors from './Constructors.js'
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<MapChart />} />
           <Route path="/result" element={<Result />} />
+          <Route path="/sprint" element={<Sprint />} />
           <Route path="/standing" element={<Standing />} />
           <Route path="/constructor" element={<Constructors />} />
         </Routes>

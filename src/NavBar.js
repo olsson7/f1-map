@@ -11,6 +11,7 @@ function NavBar() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/result">Results</Nav.Link>
+            <Nav.Link href="/sprint">Sprint</Nav.Link>
             <Nav.Link href="/standing">Standings</Nav.Link>
             <Nav.Link href="/constructor">Constructors</Nav.Link>
           </Nav>
