@@ -152,6 +152,8 @@ const MapChart = () => {
 
     const isRaceToday = next.length > 0 && new Date(next[0].date).toDateString() === new Date().toDateString();
 
+    console.log(isRaceToday);
+
 
 
 
@@ -163,34 +165,70 @@ const MapChart = () => {
                 <h2>F1 Season {next[0]?.season}</h2>
                 {next && next.length > 0 && <p>Next race is {next[0].raceName}</p>}
                 {next && next.length > 0 && <p>Round {next[0].round}</p>}
-                {next && next.length > 0 && <p>{next[0].date}, {format(
-                    new Date(`${next[0].date}T${next[0].time}`),
-                    "HH:mm"
-                )} </p>}
+                {
+                    next && next.length > 0 && (
+                        <p>
+                            {next[0].date},
+                            {
+                                (() => {
+                                    try {
+                                        const dateTimeString = `${next[0].date}T${next[0].time}`;
 
-                {next && next.length > 0 && (
-                    <p>
-                        {new Date(`${next[0].date}T${next[0].time}`) > new Date(Date.now()) ? ( //${next[0].date}T${next[0].time}
-                            <>
-                                <FlipCountdown
-                                    hideYear={new Date(next[0].date) - new Date() < 31536000000} // Hide year if the race is sooner than 1 year (31536000000 milliseconds)
-                                    hideMonth={new Date(next[0].date) - new Date() < 2592000000} // Hide month if the race is sooner than 30 days (2592000000 milliseconds)
-                                    hideDay={new Date(next[0].date) - new Date() < 86400000} // Hide day if the race is sooner than 1 day (86400000 milliseconds)
-                                    hourTitle="Hours"
-                                    minuteTitle="Minutes"
-                                    secondTitle="Seconds"
-                                    size={isSmallScreen ? 'small' : 'medium'}
-                                    endAt={`${next[0].date} ${next[0].time}`} // Use the race date and time as the end point
-                                    onTimeUp={() => console.log("Time's up ⏳")}
-                                />
-                            </>
-                        ) : (
-                            <p className="RaceText">Race is live</p>
-                        )}
-                    </p>
+                                        console.log(dateTimeString);
+                                        const dateObject = new Date(dateTimeString);
+                                        if (isNaN(dateObject.getTime())) {
+                                            throw new Error('Invalid date');
+                                        }
+                                        return format(dateObject, "HH:mm");
+                                    } catch (error) {
+                                        console.error("Error formatting date:", error);
+                                        return " Time not set yet.";
+                                    }
+                                })()
+                            }
+                        </p>
+                    )
+                }
 
+{next && next.length > 0 && (
+  <p>
+    {new Date(`${next[0].date}T${next[0].time}`) > new Date() ? (
+      <FlipCountdown
+        hideYear={new Date(next[0].date) - new Date() < 31536000000}
+        hideMonth={new Date(next[0].date) - new Date() < 2592000000}
+        hideDay={new Date(next[0].date) - new Date() < 86400000}
+        hourTitle="Hours"
+        minuteTitle="Minutes"
+        secondTitle="Seconds"
+        size={isSmallScreen ? 'small' : 'medium'}
+        endAt={`${next[0].date} ${next[0].time}`}
+        onTimeUp={() => console.log("Time's up ⏳")}
+      />
+    ) : (
+      (() => {
+        try {
+          const raceDateTime = new Date(`${next[0].date}T${next[0].time}`);
+          const now = new Date();
+          if (isNaN(raceDateTime.getTime())) {
+            throw new Error('Invalid date');
+          }
 
-                )}
+          if (raceDateTime > now) {
+            // The race is in the future - this case should be handled by the FlipCountdown above
+            return null;
+          } else {
+            // Race is now or in the past
+            return <p className="RaceText">Race is live</p>;
+          }
+        } catch (error) {
+          console.error("Error formatting date:", error);
+          return <p></p>;
+        }
+      })()
+    )}
+  </p>
+)}
+
 
 
                 {isRaceToday && (
